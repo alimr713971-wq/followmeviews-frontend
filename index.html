@@ -1,26 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Order Form</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FollowMe Orders</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg:#0b0c10; --card:#151821; --text:#e6e9ef; --muted:#9aa3af; --brand:#4f46e5; }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      background:linear-gradient(180deg,#0b0c10 0%, #10131c 100%);
+      color:var(--text); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;
+    }
+    .wrap{ width:100%; max-width:560px; background:var(--card); border-radius:20px; padding:24px; box-shadow:0 10px 30px rgba(0,0,0,.35); border:1px solid rgba(255,255,255,.06); }
+    h1{ margin:0 0 4px; font-size:24px; font-weight:600; }
+    p.sub{ margin:0 0 20px; color:var(--muted); font-size:14px; }
+    .grid{ display:grid; gap:14px; }
+    label{ font-size:13px; color:#cfd6dd; display:block; margin:0 0 6px; }
+    input,select,button{ width:100%; height:44px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:#0f1220; color:var(--text); padding:0 14px; outline:none; }
+    input::placeholder{ color:#7d8694; }
+    button{ background:var(--brand); border:0; font-weight:600; cursor:pointer; transition:transform .06s ease, box-shadow .15s ease; box-shadow:0 8px 20px rgba(79,70,229,.35); }
+    button:hover{ transform:translateY(-1px); box-shadow:0 10px 26px rgba(79,70,229,.45); }
+    .muted{ font-size:12px; color:var(--muted); }
+    .msg{ margin-top:14px; padding:12px; border-radius:12px; font-size:14px; }
+    .ok{ background:#12241a; border:1px solid #1f7a39; color:#a7f3d0; }
+    .err{ background:#2a1212; border:1px solid #933; color:#fca5a5; }
+    @media (max-width:520px){ .wrap{ padding:18px; border-radius:16px; } h1{ font-size:20px; } }
+  </style>
 </head>
 <body>
-  <h2>Place an Order</h2>
-  <form id="orderForm">
-    <label>Username:</label>
-    <input type="text" id="username" required><br><br>
+  <main class="wrap">
+    <h1>Place an Order</h1>
+    <p class="sub">Owner ke liye TikTok / Instagram / YouTube par FREE. Promo: FREE100</p>
 
-    <label>Service:</label>
-    <input type="text" id="service" required><br><br>
+    <form id="orderForm" class="grid">
+      <div>
+        <label for="platform">Platform</label>
+        <select id="platform">
+          <option value="tiktok">TikTok</option>
+          <option value="instagram">Instagram</option>
+          <option value="youtube">YouTube</option>
+        </select>
+      </div>
 
-    <label>Quantity:</label>
-    <input type="number" id="quantity" required><br><br>
+      <div>
+        <label for="service">Service</label>
+        <select id="service">
+          <option value="followers">Followers</option>
+          <option value="likes">Likes</option>
+          <option value="views">Views</option>
+        </select>
+      </div>
 
-    <button type="submit">Submit</button>
-  </form>
+      <div>
+        <label for="username">Username</label>
+        <input id="username" type="text" placeholder="account username" required />
+      </div>
 
-  <div id="result" style="margin-top:20px;"></div>
+      <div>
+        <label for="quantity">Quantity</label>
+        <input id="quantity" type="number" min="1" value="100" required />
+        <div class="muted">Example: 100, 500, 1000…</div>
+      </div>
+
+      <div>
+        <label for="promo">Promo (optional)</label>
+        <input id="promo" type="text" placeholder="FREE100" />
+      </div>
+
+      <button type="submit">Submit Order</button>
+    </form>
+
+    <div id="response"></div>
+  </main>
 
   <script src="script.js"></script>
 </body>

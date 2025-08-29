@@ -1,17 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FollowMeViews</title>
-</head>
 <body>
-  <h1>🚀 FollowMeViews Frontend</h1>
-  <p>Frontend is working ✅</p>
-
-  <button onclick="callAPI()">Call Backend API</button>
+  <h2>Place Order</h2>
+  
+  <input type="text" id="username" placeholder="Enter username"><br><br>
+  <select id="service">
+    <option value="followers">Followers</option>
+    <option value="likes">Likes</option>
+    <option value="views">Views</option>
+  </select><br><br>
+  <input type="number" id="quantity" placeholder="Enter quantity"><br><br>
+  
+  <button onclick="callAPI()">Submit Order</button>
+  
   <p id="result"></p>
 
   <script src="script.js"></script>
 </body>
-</html>

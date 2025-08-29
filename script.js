@@ -1,5 +1,5 @@
 // ⛳ BACKEND URL YAHAN DAALO:
-const BACKEND_URL = "https://followmeviews-api-2uuj.vercel.app"; 
+const BACKEND_URL = "https://followmeviews-api-2uuj.vercel.app";
 // example: https://your-api.vercel.app
 
 const form = document.getElementById("orderForm");

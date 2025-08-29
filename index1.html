@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FollowMe Orders</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; padding: 40px; }
+    input, button { margin: 5px; padding: 10px; width: 250px; }
+    button { cursor: pointer; background: #4CAF50; color: white; border: none; border-radius: 5px; }
+    button:hover { background: #45a049; }
+    #response { margin-top: 20px; font-weight: bold; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>🚀 Place Your Order</h1>
+  
+  <form id="orderForm">
+    <input type="text" id="username" placeholder="Enter Username" required /><br>
+    <input type="number" id="quantity" placeholder="Quantity" required /><br>
+    <input type="text" id="promo" placeholder="Promo Code (optional)" /><br>
+    <button type="submit">Submit</button>
+  </form>
+
+  <p id="response"></p>
+
+  <script>
+    document.getElementById("orderForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      
+      const username = document.getElementById("username").value;
+      const quantity = document.getElementById("quantity").value;
+      const promo = document.getElementById("promo").value;
+
+      try {
+        const res = await fetch("https://followmeviews-api.vercel.app/order", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ service: "instagram-followers", username, quantity, promo })
+        });
+
+        const data = await res.json();
+        document.getElementById("response").innerText = JSON.stringify(data, null, 2);
+      } catch (err) {
+        document.getElementById("response").innerText = "❌ Error connecting to API";
+      }
+    });
+  </script>
+</body>
+</html>

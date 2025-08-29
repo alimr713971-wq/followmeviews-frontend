@@ -1,160 +1,114 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FollowMeViews - Free Panel</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f6fa;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+import { useState } from "react";
+
+export default function Home() {
+  const [platform, setPlatform] = useState("TikTok");
+  const [service, setService] = useState("Likes");
+  const [username, setUsername] = useState("");
+  const [quantity, setQuantity] = useState(100);
+  const [promo, setPromo] = useState("");
+  const [response, setResponse] = useState(null);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await fetch("/api/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ platform, service, username, quantity, promo }),
+      });
+
+      const data = await res.json();
+      setResponse(data);
+    } catch (err) {
+      setResponse({ success: false, error: "Failed to connect to API" });
     }
+  };
 
-    .container {
-      background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 420px;
-    }
+  return (
+    <div className="min-h-screen flex justify-center items-center bg-gray-100">
+      <div className="bg-white shadow-lg rounded-xl p-8 w-96">
+        <h1 className="text-xl font-bold mb-6 text-center">🚀 FollowMeViews</h1>
 
-    h1 {
-      text-align: center;
-      color: #333;
-      font-size: 22px;
-    }
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block font-semibold">Platform</label>
+            <select
+              value={platform}
+              onChange={(e) => setPlatform(e.target.value)}
+              className="w-full border p-2 rounded"
+            >
+              <option>TikTok</option>
+              <option>Instagram</option>
+              <option>YouTube</option>
+            </select>
+          </div>
 
-    label {
-      font-weight: bold;
-      margin: 10px 0 5px;
-      display: block;
-    }
+          <div>
+            <label className="block font-semibold">Service</label>
+            <select
+              value={service}
+              onChange={(e) => setService(e.target.value)}
+              className="w-full border p-2 rounded"
+            >
+              <option>Likes</option>
+              <option>Followers</option>
+              <option>Views</option>
+            </select>
+          </div>
 
-    select, input {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 12px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 14px;
-    }
+          <div>
+            <label className="block font-semibold">Username / Link</label>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full border p-2 rounded"
+              placeholder="https://tiktok.com/@yourusername"
+              required
+            />
+          </div>
 
-    button {
-      width: 100%;
-      padding: 12px;
-      background: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-    }
+          <div>
+            <label className="block font-semibold">Quantity</label>
+            <input
+              type="number"
+              value={quantity}
+              onChange={(e) => setQuantity(e.target.value)}
+              className="w-full border p-2 rounded"
+              required
+            />
+          </div>
 
-    button:hover {
-      background: #45a049;
-    }
+          <div>
+            <label className="block font-semibold">Promo Code (optional)</label>
+            <input
+              type="text"
+              value={promo}
+              onChange={(e) => setPromo(e.target.value)}
+              className="w-full border p-2 rounded"
+              placeholder="Free100"
+            />
+          </div>
 
-    .msg {
-      margin-top: 15px;
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 14px;
-    }
+          <button
+            type="submit"
+            className="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600"
+          >
+            Submit Order
+          </button>
+        </form>
 
-    .ok { background: #d4edda; color: #155724; }
-    .err { background: #f8d7da; color: #721c24; }
-
-    small {
-      font-size: 12px;
-      color: #555;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>🚀 FollowMeViews</h1>
-    <form id="orderForm">
-      <label>Platform</label>
-      <select id="platform" required>
-        <option value="tiktok">TikTok</option>
-        <option value="youtube">YouTube</option>
-        <option value="instagram">Instagram</option>
-      </select>
-
-      <label>Service</label>
-      <select id="service" required>
-        <option value="likes">Likes</option>
-        <option value="followers">Followers</option>
-        <option value="views">Views</option>
-      </select>
-
-      <label>Username / Link</label>
-      <input type="text" id="username" placeholder="Enter username or video link" required />
-
-      <label>Quantity</label>
-      <input type="number" id="quantity" placeholder="Enter quantity" required />
-
-      <label>Promo Code (optional)</label>
-      <input type="text" id="promo" placeholder="Enter promo code if any" />
-
-      <button type="submit">Submit Order</button>
-    </form>
-
-    <div id="response"></div>
-  </div>
-
-  <script>
-    // ✅ Tumhara backend link
-    const BACKEND_URL = "https://followmeviews-api-2uuj.vercel.app"; 
-
-    const form = document.getElementById("orderForm");
-    const responseBox = document.getElementById("response");
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      responseBox.innerHTML = "⏳ Processing...";
-
-      const payload = {
-        platform: document.getElementById("platform").value,
-        service:  document.getElementById("service").value,
-        username: document.getElementById("username").value.trim(),
-        quantity: Number(document.getElementById("quantity").value),
-        promo:    document.getElementById("promo").value.trim()
-      };
-
-      try {
-        const res = await fetch(`${BACKEND_URL}/api/order`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-
-        const data = await res.json();
-
-        if (data.success) {
-          responseBox.innerHTML = `
-            <div class="msg ok">
-              ✅ ${data.message}<br/>
-              <small>
-                Platform: <b>${data.platform}</b> • Service: <b>${data.service}</b><br/>
-                Order ID: <b>${data.orderId}</b> 
-                ${data.free ? " • 🎉 FREE" : ` • Cost: $${(data.cost||0).toFixed(2)}`}
-              </small>
-            </div>`;
-        } else {
-          responseBox.innerHTML = `<div class="msg err">❌ ${data.error || "Order failed"}</div>`;
-        }
-      } catch (err) {
-        responseBox.innerHTML = `<div class="msg err">❌ Failed to connect to API</div>`;
-      }
-    });
-  </script>
-</body>
-</html>
+        {response && (
+          <div
+            className={`mt-4 p-3 rounded ${
+              response.success ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+            }`}
+          >
+            {response.message || response.error}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

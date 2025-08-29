@@ -1,34 +1,17 @@
-// frontend/script.js
-document.getElementById("orderForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
+async function placeOrder(username, service, quantity) {
+  try {
+    const response = await fetch("https://followmeviews-api-2uuj.vercel.app/api/order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, service, quantity })
+    });
 
-    const username = document.getElementById("username").value;
-    const service = document.getElementById("service").value;
-    const quantity = document.getElementById("quantity").value;
+    const data = await response.json();
+    console.log("Order Response:", data);
 
-    const resultDiv = document.getElementById("result");
-    resultDiv.innerHTML = "Processing...";
-
-    try {
-        const response = await fetch("https://followmeviews-api.vercel.app/order", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ 
-                username, 
-                service, 
-                quantity, 
-                promo: username   // 👈 yahan add karo
-            }),
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-            resultDiv.innerHTML = `<span style="color: green;">${data.message}</span>`;
-        } else {
-            resultDiv.innerHTML = `<span style="color: red;">Error: ${data.error || "Something went wrong"}</span>`;
-        }
-    } catch (err) {
-        resultDiv.innerHTML = `<span style="color: red;">Failed to connect to API</span>`;
-    }
-});
+    alert(data.message || "Order placed!");
+  } catch (error) {
+    console.error("Error placing order:", error);
+    alert("Something went wrong!");
+  }
+}

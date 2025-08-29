@@ -1,14 +1,18 @@
 async function callAPI() {
   try {
-    const response = await fetch("https://followmeviews-api-2uuj.vercel.app/order", {
+    const username = document.getElementById("username").value;
+    const service = document.getElementById("service").value;
+    const quantity = document.getElementById("quantity").value;
+
+    const response = await fetch("https://followmeviews-api-2uuj.vercel.app/api/order", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        username: "testuser",
-        service: "followers",
-        quantity: 100
+        username,
+        service,
+        quantity
       })
     });
 
